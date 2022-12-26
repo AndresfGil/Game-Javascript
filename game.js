@@ -13,6 +13,11 @@ const playerPosition = {
     y: undefined,
 };
 
+const giftPosition = {
+    x: undefined,
+    y: undefined,
+}
+
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
@@ -42,6 +47,7 @@ function startGame() {
     const mapRowCols = mapRows.map(row => row.trim().split(''));
     console.log({ map, mapRows, mapRowCols });
 
+    game.clearRect(0, 0, canvasSize, canvasSize);
     mapRowCols.forEach((row, rowI) => {
         row.forEach((col, colI) => {
             const emoji = emojis[col];
@@ -49,9 +55,14 @@ function startGame() {
             const posY = elementsSize * (rowI + 1);
 
             if (col == 'O') {
-                playerPosition.x = posX;
-                playerPosition.y = posY;
-                console.log({ playerPosition });
+                if (!playerPosition.x && !playerPosition.y) {
+                    playerPosition.x = posX;
+                    playerPosition.y = posY;
+                    console.log({ playerPosition });
+                }
+            } else if (col == 'I'){
+                giftPosition.x = posX
+                giftPosition.y = posY
             }
 
             game.fillText(emoji, posX, posY);
@@ -77,17 +88,30 @@ function moveByKeys(event) {
     else if (event.key == 'ArrowRight') moveRight();
     else if (event.key == 'ArrowDown') moveDown();
 }
-function moveUp() {
-    console.log('Me quiero mover hacia arriba');
-    playerPosition.y -= elementsSize;
-    movePlayer();
+
+
+function moveUp(){
+    if(playerPosition.y > elementsSize) {
+        playerPosition.y -= elementsSize;
+        startGame();
+    }
+    
 }
-function moveLeft() {
-    console.log('Me quiero mover hacia izquierda');
+function moveLeft(){
+    if(playerPosition.x > elementsSize){
+        playerPosition.x -= elementsSize;
+        startGame();
+    }
 }
-function moveRight() {
-    console.log('Me quiero mover hacia derecha');
+function moveRight(){
+    if(playerPosition.x < canvasSize){
+        playerPosition.x += elementsSize;
+        startGame();
+    }
 }
-function moveDown() {
-    console.log('Me quiero mover hacia abajo');
+function moveDown(){
+    if(playerPosition.y < canvasSize) {
+        playerPosition.y += elementsSize;
+        startGame();
+    }
 }
