@@ -156,42 +156,27 @@ function moveByKeys(event) {
     else if (event.key == 'ArrowRight') moveRight();
     else if (event.key == 'ArrowDown') moveDown();
 }
-function moveUp() {
-    console.log('Me quiero mover hacia arriba');
-
-    if ((playerPosition.y - elementsSize) < elementsSize) {
-        console.log('OUT');
-    } else {
+function moveUp(){
+    if(playerPosition.y > elementsSize) {
         playerPosition.y -= elementsSize;
         startGame();
     }
-}
-function moveLeft() {
-    console.log('Me quiero mover hacia izquierda');
 
-    if ((playerPosition.x - elementsSize) < elementsSize) {
-        console.log('OUT');
-    } else {
+}
+function moveLeft(){
+    if(playerPosition.x > elementsSize){
         playerPosition.x -= elementsSize;
         startGame();
     }
 }
-function moveRight() {
-    console.log('Me quiero mover hacia derecha');
-
-    if ((playerPosition.x + elementsSize) > canvasSize) {
-        console.log('OUT');
-    } else {
+function moveRight(){
+    if(playerPosition.x < canvasSize){
         playerPosition.x += elementsSize;
         startGame();
     }
 }
-function moveDown() {
-    console.log('Me quiero mover hacia abajo');
-
-    if ((playerPosition.y + elementsSize) > canvasSize) {
-        console.log('OUT');
-    } else {
+function moveDown(){
+    if(playerPosition.y < canvasSize) {
         playerPosition.y += elementsSize;
         startGame();
     }
