@@ -6,6 +6,8 @@ const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 const spanLives = document.querySelector('#lives');
 const spanTime = document.querySelector('#time');
+const spanRecord = document.querySelector('#record');
+const pResult = document.querySelector('#result');
 
 
 let canvasSize;
@@ -27,17 +29,26 @@ let enemyPositions = [];
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
+function fixNumber(n) {
+    return Number(n.toFixed(2));
+}
+
 function setCanvasSize() {
     if (window.innerHeight > window.innerWidth) {
-        canvasSize = window.innerWidth * 0.8;
+        canvasSize = window.innerWidth * 0.7;
     } else {
-        canvasSize = window.innerHeight * 0.8;
+        canvasSize = window.innerHeight * 0.7;
     }
+
+    canvasSize =  Number(canvasSize.toFixed(0));
 
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
     elementsSize = canvasSize / 10;
+
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
 
     startGame();
 }
@@ -51,13 +62,14 @@ function startGame() {
     const map = maps[level];
 
     if (!map) {
-        gameWin();
+        gameWinAndRecord();
         return;
     }
 
     if (!timeStart) {
         timeStart = Date.now();
         timeInterval = setInterval(showTime, 100);
+        showRecord();
     }
 
     const mapRows = map.trim().split('\n');
@@ -141,9 +153,26 @@ function levelFail() {
     startGame();
 }
 
-function gameWin() {
+function gameWinAndRecord() {
     console.log('¡Terminaste el juego!');
     clearInterval(timeInterval)
+
+    const recordTime = localStorage.getItem('record_time');
+    const playerTime = Date.now() - timeStart;
+
+    if (recordTime) {
+        const playerTime = Date.now() - timeStart;
+        if (recordTime >= playerTime) {
+            localStorage.setItem('record_time', playerTime)
+            pResult.innerHTML = 'Superaste el record'
+        } else {
+            pResult.innerHTML = 'No superaste el record'
+        }
+    } else {
+        localStorage.setItem('record_time', playerTime);
+    }
+
+    console.log(recordTime);
 }
 
 function showLives() {
@@ -158,6 +187,10 @@ function showTime() {
     spanTime.innerHTML = Date.now() - timeStart;
 }
 
+function showRecord() {
+    spanRecord.innerHTML = localStorage.getItem('record_time')
+}
+
 window.addEventListener('keydown', moveByKeys);
 btnUp.addEventListener('click', moveUp);
 btnLeft.addEventListener('click', moveLeft);
@@ -170,27 +203,27 @@ function moveByKeys(event) {
     else if (event.key == 'ArrowRight') moveRight();
     else if (event.key == 'ArrowDown') moveDown();
 }
-function moveUp(){
-    if(playerPosition.y > elementsSize) {
+function moveUp() {
+    if (playerPosition.y > elementsSize) {
         playerPosition.y -= elementsSize;
         startGame();
     }
 
 }
-function moveLeft(){
-    if(playerPosition.x > elementsSize){
+function moveLeft() {
+    if (playerPosition.x > elementsSize) {
         playerPosition.x -= elementsSize;
         startGame();
     }
 }
-function moveRight(){
-    if(playerPosition.x < canvasSize){
+function moveRight() {
+    if (playerPosition.x < canvasSize) {
         playerPosition.x += elementsSize;
         startGame();
     }
 }
-function moveDown(){
-    if(playerPosition.y < canvasSize) {
+function moveDown() {
+    if (playerPosition.y < canvasSize) {
         playerPosition.y += elementsSize;
         startGame();
     }

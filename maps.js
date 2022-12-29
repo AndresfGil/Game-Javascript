@@ -27,11 +27,11 @@ const maps = []; maps.push(`
   XX----XXXX
   X--XX-XXXX
   X-XXX--XXX
-  X-XXXX-XXX
+  X--XXX-XXX
   XX--XX--XX
   XX--XXX-XX
-  XXXX---IXX
-  XXXXXXXXXX
+  XX-X---IXX
+  XX---XXXXX
   `); maps.push(`
   I-----XXXX
   XXXXX-XXXX
